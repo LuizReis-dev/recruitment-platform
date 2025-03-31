@@ -1,0 +1,12 @@
+name: "recruitment-platform"
+services:
+  eurekaserver:
+    build: ./eurekaserver/.
+    ports:
+      - 8761:8761
+    networks:
+      - recruitment-platform
+
+networks:
+  recruitment-platform:
+    driver: bridge

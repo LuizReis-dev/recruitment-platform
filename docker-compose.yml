@@ -6,7 +6,16 @@ services:
       - 8761:8761
     networks:
       - recruitment-platform
-
+  mscloudgateway:
+    build: ./mscloudgateway/.
+    ports:
+      - 8080:8080
+    networks:
+      - recruitment-platform
+    depends_on:
+      - eurekaserver
+    environment:
+      - EUREKA_URL=eurekaserver:8761/eureka/
 networks:
   recruitment-platform:
     driver: bridge

@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5434/msusers}
+    username: ${DATABASE_USERNAME:msusers}
+    password: ${DATABASE_PASSWORD:1234567}
+    driver-class-name: org.postgresql.Driver
+    jpa:
+      hibernate:
+        ddl-auto: validate
+      show-sql: true
+    flyway:
+      enabled: true
+      locations: classpath:db/migration
+  application:
+    name: msusers
+server:
+  port: 0
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_USER}:${EUREKA_PASSWORD}@${EUREKA_URL:localhost:8761/eureka/}
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

@@ -5,6 +5,11 @@ spring:
     name: mscloudgateway
   cloud:
     gateway:
+      routes:
+        - id: msusers
+          uri: lb://msusers
+          predicates:
+            - Path=/api/v1/users
       discovery:
         locator:
           enabled: true

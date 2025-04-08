@@ -1,6 +1,7 @@
 name: "recruitment-platform"
 services:
   eurekaserver:
+    container_name: eurekaserver
     build: ./eurekaserver/.
     ports:
       - 8761:8761
@@ -16,6 +17,36 @@ services:
       - eurekaserver
     environment:
       - EUREKA_URL=eurekaserver:8761/eureka/
+  msusers:
+    build: ./msusers/.
+    networks:
+      - recruitment-platform
+      - msusers
+    depends_on:
+      - eurekaserver
+      - db-msusers
+    environment:
+      EUREKA_URL: eurekaserver:8761/eureka/ 
+      DATABASE_URL: jdbc:postgresql://db-msusers:5434/msusers
+      DATABASE_USERNAME: msusers
+      DATABASE_PASSWORD: 1234567
+  db-msusers:
+    container_name: db-msusers
+    image: postgres:17.4-alpine
+    restart: always
+    ports:
+      - "5434:5434"
+    volumes:
+      - ./.data/postgresql/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: msusers
+      POSTGRES_USER: msusers
+      POSTGRES_PASSWORD: 1234567
+    command: -p 5434
+    networks:
+      - msusers
 networks:
   recruitment-platform:
+    driver: bridge
+  msusers:
     driver: bridge
